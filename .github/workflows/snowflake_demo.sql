@@ -32,4 +32,4 @@ SHOW GIT BRANCHES IN devops_db.common.git_repo;
 DESCRIBE GIT REPOSITORY devops_db.common.git_repo;
 
 
-EXECUTE IMMEDIATE FROM @git_snowflake_extensions/branches/main/snowflake/sample_demo.sql;
+EXECUTE IMMEDIATE FROM @devops_db.common.git_repo/branches/main/.github/workflows/snowflake_demo.sql;
