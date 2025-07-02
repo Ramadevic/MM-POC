@@ -18,10 +18,11 @@ jobs:
         with:
           cli-version: '3.6.0'  # Optional: omit to use latest
 
-      - name: Run deploy.sql in Snowflake
+      - name: Run deploy.sql using Snowflake CLI
         env:
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
           SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
           SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
         run: |
-          snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -p $SNOWSQL_PWD -f deploy.sql
+          snow sql -q "USE ROLE SYSADMIN; USE WAREHOUSE DEVOPS_WH; USE DATABASE DEVOPS_DB; USE SCHEMA COMMON;" -f deploy.sql
+
