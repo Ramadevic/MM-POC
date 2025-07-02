@@ -1,23 +1,29 @@
--- Set context
-USE ROLE ACCOUNTADMIN;
-USE WAREHOUSE devops_wh;
-USE DATABASE devops_db;
-USE SCHEMA common;
+name: Deploy to Snowflake
 
--- Create or replace a table
-CREATE OR REPLACE TABLE employee_demo (
-    emp_id       INT,
-    emp_name     STRING,
-    department   STRING,
-    hire_date    DATE
-);
+on:
+  push:
+    branches:
+      - main  # Change if you're deploying from a different branch
 
--- Insert sample data
-INSERT INTO employee_demo (emp_id, emp_name, department, hire_date)
-VALUES
-    (1, 'Alice Johnson', 'Finance', '2023-01-15'),
-    (2, 'Bob Smith', 'Engineering', '2023-03-01'),
-    (3, 'Carol Lee', 'HR', '2023-05-12');
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
--- View data
-SELECT * FROM employee_demo;
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Snowflake CLI using GitHub Action
+        uses: snowflakedb/snowflake-cli-action@v1.5
+        with:
+          cli-version: '3.6.0'  # Optional: remove or update for the latest version
+
+      - name: Run snowflake-deploy.sql using Snowflake CLI
+        env:
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWSQL_PWD }}
+        run: |
+          snow sql \
+            -q "USE ROLE ACCOUNTADMIN; USE WAREHOUSE DEVOPS_WH; USE DATABASE DEVOPS_DB; USE SCHEMA COMMON;" \
+            -f .github/workflows/snowflake-deploy.sql
