@@ -4,7 +4,7 @@ use schema common;
 
 CREATE OR REPLACE SECRET git_secret_demo
   TYPE = password
-  USERNAME = 'user_name'
+  USERNAME = 'Ramadevic'
   PASSWORD = 'access_token'
 ;
 
