@@ -1,0 +1,27 @@
+name: Deploy to Snowflake
+
+on:
+  push:
+    branches:
+      - main  # or 'main' or 'dev' depending on your setup
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install SnowSQL using official GitHub Action
+        uses: snowflakedb/snowflake-cli-action@v1.5
+        with:
+          cli-version: '3.6.0'  # Optional: omit to use latest
+
+      - name: Run deploy.sql using Snowflake CLI
+        env:
+          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+        run: |
+          snow sql -q "USE ROLE ACCOUNTADMIN; USE WAREHOUSE DEVOPS_WH; USE DATABASE DEVOPS_DB; USE SCHEMA COMMON;" -f snowflake-deploy.sql
