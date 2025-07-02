@@ -3,7 +3,7 @@ name: Deploy to Snowflake
 on:
   push:
     branches:
-      - main  # Change if you're deploying from a different branch
+      - main  
 
 jobs:
   deploy:
