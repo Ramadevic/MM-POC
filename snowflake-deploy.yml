@@ -28,4 +28,7 @@ jobs:
           SNOWFLAKE_SCHEMA: COMMON
           
         run: |
-          snowsql -f snowflake-deploy.sql
+          snowsql config init
+          snow connection add github-ci --account name $LY85053 --username $RAMA --password $Magmutual@2025
+          snow sql -c github-ci -f snowflake-deploy.sql
+          
