@@ -12,8 +12,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install SnowSQL using official GitHub Action
-        uses: snowflakedb/setup-snowflake-cli@v1
+      - name: Install SnowSQL CLI
+        run: |
+          pipx ensurepath
+          pipx install snowflake-cli-labs
 
       - name: Run deploy.sql using Snowflake CLI
         env:
@@ -26,4 +28,4 @@ jobs:
           SNOWFLAKE_SCHEMA: COMMON
           
         run: |
-          snowsql -f snowflake-deploy.yml
+          snowsql -f snowflake-deploy.sql
