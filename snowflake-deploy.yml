@@ -30,5 +30,7 @@ jobs:
         run: |
           snowsql config init
           snow connection add github-ci --account name $LY85053 --username $RAMA --password $Magmutual@2025
+          snow sql -q "USE ROLE ACCOUNTADMIN; USE WAREHOUSE DEVOPS_WH; USE DATABASE DEVOPS_DB; USE SCHEMA COMMON;"
+          snow sql -f snowflake-deploy.sql
           snow sql -c github-ci -f snowflake-deploy.sql
           
