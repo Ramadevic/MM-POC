@@ -23,7 +23,7 @@ jobs:
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
           SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
           SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+          
         run: |
-          snow sql -q "USE ROLE ACCOUNTADMIN; USE WAREHOUSE DEVOPS_WH; USE DATABASE DEVOPS_DB; USE SCHEMA COMMON;"
           snow sql -f snowflake-deploy.sql
           
