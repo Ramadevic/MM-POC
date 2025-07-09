@@ -3,7 +3,7 @@ name: Deploy to Snowflake
 on:
   push:
     branches:
-      - main  
+      - main
 
 jobs:
   deploy:
@@ -18,22 +18,19 @@ jobs:
         with:
           cli-version: '3.6.0'
 
-      - name: Run SQL using Snowflake CLI with flags
+      - name: Run SQL using Snowflake CLI with temporary connection
         env:
           ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}         
-          USER: ${{ secrets.SNOWSQL_USER }}              
-          PASSWORD: ${{ secrets.SNOWSQL_PWD }}          
+          USER: ${{ secrets.SNOWSQL_USER }}
+          PASSWORD: ${{ secrets.SNOWSQL_PWD }}
         run: |
           snow sql \
-            -a $ACCOUNT \
-            -u $USER \
-            -p $PASSWORD \
-            -r ACCOUNTADMIN \
-            -w DEVOPS_WH \
-            -d DEVOPS_DB \
-            -s COMMON \
+            --temporary-connection \
+            --account $ACCOUNT \
+            --user $USER \
+            --password $PASSWORD \
+            --role ACCOUNTADMIN \
+            --warehouse DEVOPS_WH \
+            --database DEVOPS_DB \
+            --schema COMMON \
             --filename snowflake-deploy.sql
-
-      - name: Run SQL using Snowflake CLI
-        run: |
-          snow sql --filename snowflake-deploy.sql --connection default
