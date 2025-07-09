@@ -36,6 +36,9 @@ jobs:
           schema = "COMMON"
           EOF
           chmod 0600 ~/.snowflake/config.toml
+          
+      - name: Test Snowflake Connection
+        run: echo "account-details ${{ secrets.SNOWSQL_ACCOUNT }}"
 
       - name: Test Snowflake Connection
         run: |
