@@ -35,8 +35,16 @@ jobs:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
           SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWSQL_PWD }}
-          SNOWFLAKE_FILENAME: snowflake-deploy.sql
           
         run: |
-          snow sql --filename snowflake-deploy.sql
+          snow sql \
+            --accountname $SNOWFLAKE_ACCOUNT \
+            --username $SNOWFLAKE_USER \
+            --password $SNOWFLAKE_PASSWORD \
+            --dbname DEVOPS_DB \
+            --schemaname Common \
+            --warehouse DEVOPS_WH \
+            --role ACCOUNTADMIN \
+            --filename snowflake-deploy.sql
+           
           
