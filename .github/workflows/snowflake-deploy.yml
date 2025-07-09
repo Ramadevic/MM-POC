@@ -40,3 +40,4 @@ jobs:
       - name: Run SQL using Snowflake CLI
         run: |
           snow sql --filename snowflake-deploy.sql --connection default
+          
