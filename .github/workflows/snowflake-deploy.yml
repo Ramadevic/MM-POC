@@ -33,7 +33,8 @@ jobs:
       EOF
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}          
+          SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}   
+          
 
       - name: Run SQL using Snowflake CLI
         env:
