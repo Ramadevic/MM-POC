@@ -30,12 +30,12 @@ jobs:
           EOF
 
 
-      - name: Run deploy.sql using Snowflake CLI
+      - name: Run SQL Scripts using Snowflake CLI
         env:
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
           SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
-          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+          SNOWSQL_PASSWORD: ${{ secrets.SNOWSQL_PWD }}
           
         run: |
-          snow sql run -f snowflake-deploy.sql
+          snow sql -f snowflake-deploy.sql
           
