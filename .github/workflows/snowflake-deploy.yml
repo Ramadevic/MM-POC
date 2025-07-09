@@ -35,6 +35,7 @@ jobs:
           database = "DEVOPS_DB"
           schema = "COMMON"
           EOF
+          chmod 0600 ~/.snowflake/config.toml  # Secure file permissions
 
       - name: Run SQL using Snowflake CLI
         run: |
