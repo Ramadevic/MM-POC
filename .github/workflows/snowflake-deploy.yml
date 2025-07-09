@@ -3,7 +3,7 @@ name: Deploy to Snowflake
 on:
   push:
     branches:
-      - main  # or 'main' or 'dev' depending on your setup
+      - main  # or 'dev' depending on your setup
 
 jobs:
   deploy:
@@ -13,32 +13,33 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install SnowSQL using official GitHub Action
+      - name: Install Snowflake CLI
         uses: snowflakedb/snowflake-cli-action@v1.5
         with:
-          cli-version: '3.6.0'  # Optional: omit to use latest
+          cli-version: '3.6.0'  # Optional: use latest if preferred
 
       - name: Set up SnowSQL config file
+        env:
+          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
         run: |
           mkdir -p ~/.snowsql
           cat > ~/.snowsql/config <<EOF
-      [connections.default]
-      accountname = ${ secrets.SNOWSQL_ACCOUNT }
-      username = ${ secrets.SNOWSQL_USER }
-      password = ${ secrets.SNOWSQL_PWD }
-      rolename = ACCOUNTADMIN
-      warehousename = DEVOPS_WH
-      dbname = DEVOPS_DB
-      schemaname = COMMON
-      EOF
-        env:
-          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}   
-          
+          [connections.default]
+          accountname = "${{ env.SNOWSQL_ACCOUNT }}"
+          username = "${{ env.SNOWSQL_USER }}"
+          password = "${{ env.SNOWSQL_PWD }}"
+          rolename = ACCOUNTADMIN
+          warehousename = DEVOPS_WH
+          dbname = DEVOPS_DB
+          schemaname = COMMON
+          EOF
 
       - name: Run SQL using Snowflake CLI
         env:
-          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
-          
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWSQL_PWD }}
         run: |
-          snow sql -f snowflake-deploy.sql
+          snow sql --file snowflake-deploy.sql
