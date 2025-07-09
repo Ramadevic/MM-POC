@@ -16,7 +16,7 @@ jobs:
       - name: Install Snowflake CLI
         uses: snowflakedb/snowflake-cli-action@v1.5
         with:
-          cli-version: '3.6.0'  # optional, omit for latest
+          cli-version: '3.6.0'
 
       - name: Configure Snowflake CLI connection profile
         env:
@@ -35,9 +35,12 @@ jobs:
           database = "DEVOPS_DB"
           schema = "COMMON"
           EOF
-          chmod 0600 ~/.snowflake/config.toml  # Secure file permissions
+          chmod 0600 ~/.snowflake/config.toml
+
+      - name: Test Snowflake Connection
+        run: |
+          snow sql -q "SELECT CURRENT_USER();" --connection default
 
       - name: Run SQL using Snowflake CLI
         run: |
           snow sql --filename snowflake-deploy.sql --connection default
-          
