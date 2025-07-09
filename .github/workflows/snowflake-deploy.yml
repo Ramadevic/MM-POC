@@ -42,4 +42,4 @@ jobs:
           SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWSQL_PWD }}
         run: |
-          snow sql --file snowflake-deploy.sql
+          snow sql --filename snowflake-deploy.sql
