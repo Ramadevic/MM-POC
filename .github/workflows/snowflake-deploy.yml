@@ -3,7 +3,7 @@ name: Deploy to Snowflake
 on:
   push:
     branches:
-      - main  # adjust if you use a different branch
+      - main  
 
 jobs:
   deploy:
@@ -18,31 +18,21 @@ jobs:
         with:
           cli-version: '3.6.0'
 
-      - name: Configure Snowflake CLI connection profile
+      - name: Run SQL using Snowflake CLI with flags
         env:
-          ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          USER: ${{ secrets.SNOWSQL_USER }}
-          PASSWORD: ${{ secrets.SNOWSQL_PWD }}
+          ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}         
+          USER: ${{ secrets.SNOWSQL_USER }}              
+          PASSWORD: ${{ secrets.SNOWSQL_PWD }}          
         run: |
-          mkdir -p ~/.snowflake
-          cat > ~/.snowflake/config.toml <<EOF
-          [connections.default]
-          account = "${ACCOUNT}"
-          user = "${USER}"
-          password = "${PASSWORD}"
-          role = "ACCOUNTADMIN"
-          warehouse = "DEVOPS_WH"
-          database = "DEVOPS_DB"
-          schema = "COMMON"
-          EOF
-          chmod 0600 ~/.snowflake/config.toml
-          
-      - name: Test Snowflake Connection
-        run: echo "account-details ${{ secrets.SNOWSQL_ACCOUNT }}"
-
-      - name: Test Snowflake Connection
-        run: |
-          snow sql -q "SELECT CURRENT_USER();" --connection default
+          snow sql \
+            -a $ACCOUNT \
+            -u $USER \
+            -p $PASSWORD \
+            -r ACCOUNTADMIN \
+            -w DEVOPS_WH \
+            -d DEVOPS_DB \
+            -s COMMON \
+            --filename snowflake-deploy.sql
 
       - name: Run SQL using Snowflake CLI
         run: |
