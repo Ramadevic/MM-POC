@@ -23,9 +23,9 @@ jobs:
           mkdir -p ~/.snowsql
           cat <<EOF > ~/.snowsql/config 
       [connections.default]
-      accountname = ${{ secrets.SNOWSQL_ACCOUNT }}
-      username = ${{ secrets.SNOWSQL_USER }}
-      password = ${{ secrets.SNOWSQL_PWD }}
+      accountname = ${ secrets.SNOWSQL_ACCOUNT }
+      username = ${ secrets.SNOWSQL_USER }
+      password = ${ secrets.SNOWSQL_PWD }
       rolename = ACCOUNTADMIN
       warehousename = DEVOPS_WH
       dbname = DEVOPS_DB
