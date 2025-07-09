@@ -35,5 +35,6 @@ jobs:
             --database DEVOPS_DB \
             --schema COMMON \
             --filename snowflake-deploy.sql \
-            --debug  
+            --debug 
+            
             
