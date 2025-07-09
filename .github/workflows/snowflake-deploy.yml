@@ -3,7 +3,7 @@ name: Deploy to Snowflake
 on:
   push:
     branches:
-      - main  # or 'dev' depending on your setup
+      - main  # adjust if you use a different branch
 
 jobs:
   deploy:
@@ -16,30 +16,26 @@ jobs:
       - name: Install Snowflake CLI
         uses: snowflakedb/snowflake-cli-action@v1.5
         with:
-          cli-version: '3.6.0'  # Optional: use latest if preferred
+          cli-version: '3.6.0'  # optional, omit for latest
 
-      - name: Set up SnowSQL config file
+      - name: Configure Snowflake CLI connection profile
         env:
-          SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          SNOWSQL_USER: ${{ secrets.SNOWSQL_USER }}
-          SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
+          ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
+          USER: ${{ secrets.SNOWSQL_USER }}
+          PASSWORD: ${{ secrets.SNOWSQL_PWD }}
         run: |
-          mkdir -p ~/.snowsql
-          cat > ~/.snowsql/config <<EOF
+          mkdir -p ~/.snowflake
+          cat > ~/.snowflake/config.toml <<EOF
           [connections.default]
-          accountname = "${{ env.SNOWSQL_ACCOUNT }}"
-          username = "${{ env.SNOWSQL_USER }}"
-          password = "${{ env.SNOWSQL_PWD }}"
-          rolename = ACCOUNTADMIN
-          warehousename = DEVOPS_WH
-          dbname = DEVOPS_DB
-          schemaname = COMMON
+          account = "${ACCOUNT}"
+          user = "${USER}"
+          password = "${PASSWORD}"
+          role = "ACCOUNTADMIN"
+          warehouse = "DEVOPS_WH"
+          database = "DEVOPS_DB"
+          schema = "COMMON"
           EOF
 
       - name: Run SQL using Snowflake CLI
-        env:
-          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
-          SNOWFLAKE_USER: ${{ secrets.SNOWSQL_USER }}
-          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWSQL_PWD }}
         run: |
-          snow sql --filename snowflake-deploy.sql
+          snow sql --filename snowflake-deploy.sql --connection default
