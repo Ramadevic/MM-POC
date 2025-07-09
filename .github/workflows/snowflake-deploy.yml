@@ -18,6 +18,18 @@ jobs:
         with:
           cli-version: '3.6.0'  # Optional: omit to use latest
 
+      - name: Set up SnowSQL config file
+        run: |
+          mkdir -p ~/.snowsql
+          cat > ~/.snowsql/config <<EOF
+          [connections.default]
+          rolename = ACCOUNTADMIN
+          warehousename = DEVOPS_WH
+          dbname = DEVOPS_DB
+          schemaname = COMMON
+          EOF
+
+
       - name: Run deploy.sql using Snowflake CLI
         env:
           SNOWSQL_ACCOUNT: ${{ secrets.SNOWSQL_ACCOUNT }}
