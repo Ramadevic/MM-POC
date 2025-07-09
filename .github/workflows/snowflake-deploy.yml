@@ -36,3 +36,4 @@ jobs:
             --schema COMMON \
             --filename snowflake-deploy.sql \
             --debug  
+            
