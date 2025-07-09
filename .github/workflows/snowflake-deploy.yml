@@ -37,5 +37,5 @@ jobs:
           SNOWSQL_PWD: ${{ secrets.SNOWSQL_PWD }}
           
         run: |
-          snow sql -f snowflake-deploy.sql
+          snow sql run -f snowflake-deploy.sql
           
